@@ -1,8 +1,11 @@
 import React from 'react';
 import './style.css';
 import { BoardCellComponent } from 'components/common';
+import { GameBoard } from 'utils';
 
 export const GameBoardComponent: React.FC = () => {
+  const gameBoard = new GameBoard();
+
   return (
     <div className="game-board">
       <table className="game-board__container">
@@ -12,7 +15,8 @@ export const GameBoardComponent: React.FC = () => {
               {new Array(8).fill(0).map((_, colIndex) => (
                 <BoardCellComponent
                   key={colIndex}
-                  type={(rowIndex + colIndex) % 2 ? 'dark' : 'light'}
+                  type={(rowIndex + colIndex) % 2 ? 'light' : 'dark'}
+                  state={gameBoard.getState(rowIndex, colIndex)}
                 />
               ))}
             </tr>

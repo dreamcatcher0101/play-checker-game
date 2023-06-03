@@ -19,3 +19,11 @@
 .cell-light {
   background-color: #e3b778;
 }
+
+.cell-blue {
+  background-color: blue;
+}
+
+.cell-red {
+  background-color: red;
+}
