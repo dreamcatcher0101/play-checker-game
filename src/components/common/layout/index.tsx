@@ -1,6 +1,7 @@
 import React from 'react';
 import { FooterComponent } from '../footer';
 import { HeaderComponent } from '../header';
+import './style.css';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,9 +9,10 @@ interface LayoutProps {
 
 const LayoutComponent: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div>
-      Layout
+    <div className="layout__container">
+      <HeaderComponent />
       {children}
+      <FooterComponent />
     </div>
   );
 };
@@ -22,9 +24,7 @@ export const withLayout = <T extends object>(
   return function WithLayout(props: T) {
     return (
       <LayoutComponent>
-        <HeaderComponent />
         <WrappedComponent {...props} />
-        <FooterComponent />
       </LayoutComponent>
     );
   };
