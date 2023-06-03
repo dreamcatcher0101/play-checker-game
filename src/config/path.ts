@@ -1,1 +1,1 @@
-export const GAME_BOARD = "/";
+export const GAME_BOARD = '/';
