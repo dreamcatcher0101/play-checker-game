@@ -1,4 +1,4 @@
-export const PLAYER = {
-  BLUE: 1,
-  RED: 2,
-};
+export enum GamePlayer {
+  BLUE = 1,
+  RED = 2,
+}

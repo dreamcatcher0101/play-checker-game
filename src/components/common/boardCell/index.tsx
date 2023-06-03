@@ -1,23 +1,28 @@
-import { CellState } from 'consts';
-import React from 'react';
+import { BoardCellState } from 'consts';
+import React, { useContext } from 'react';
+import { CheckerPosition } from 'types';
 import './style.css';
+import { BoardContext } from 'contexts/board';
 
 interface BoardCellProps {
   type: 'dark' | 'light';
-  state: CellState;
+  position: CheckerPosition;
 }
 
 export const BoardCellComponent: React.FC<BoardCellProps> = ({
   type,
-  state,
+  position,
 }) => {
+  const { boardState } = useContext(BoardContext);
+
   return (
     <td className={`board-cell__container cell-${type}`}>
       <div
         className={`board-cell__item ${
-          state === CellState.BLUE_CHECKER
+          boardState[position.row][position.col] === BoardCellState.BLUE_CHECKER
             ? 'cell-blue'
-            : state === CellState.RED_CHECKER
+            : boardState[position.row][position.col] ===
+              BoardCellState.RED_CHECKER
             ? 'cell-red'
             : ''
         }`}

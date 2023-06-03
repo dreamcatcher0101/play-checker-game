@@ -1,29 +1,19 @@
-import { GAME_SIZE, CellState } from 'consts';
+import { BoardCellState } from 'consts';
 
-export class GameBoard {
-  width: number = GAME_SIZE.SMALL;
-  height: number = GAME_SIZE.SMALL;
-  state: number[][] = [];
-
-  constructor() {
-    this.state = new Array(this.width).fill(0).map((_, rowIndex) =>
-      new Array(this.height).fill(0).map((_, colIndex) => {
-        if (rowIndex < this.width / 2 - 1) {
-          return (rowIndex + colIndex) % 2
-            ? CellState.BLUE_CHECKER
-            : CellState.EMPTY;
-        } else if (rowIndex > this.width / 2) {
-          return (rowIndex + colIndex) % 2
-            ? CellState.RED_CHECKER
-            : CellState.EMPTY;
-        } else {
-          return CellState.EMPTY;
-        }
-      })
-    );
-  }
-
-  getState = (row: number, col: number): number => {
-    return this.state[row][col];
-  };
-}
+export const getNewBoard = (size: number) => {
+  return new Array(size).fill(0).map((_, row) =>
+    new Array(size).fill(0).map((_, col) => {
+      if (row < size / 2 - 1) {
+        return (row + col) % 2
+          ? BoardCellState.BLUE_CHECKER
+          : BoardCellState.EMPTY;
+      } else if (row > size / 2) {
+        return (row + col) % 2
+          ? BoardCellState.RED_CHECKER
+          : BoardCellState.EMPTY;
+      } else {
+        return BoardCellState.EMPTY;
+      }
+    })
+  );
+};

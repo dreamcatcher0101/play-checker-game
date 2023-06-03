@@ -1,1 +1,1 @@
-export * from './board';
+export * as GameBoard from './board';

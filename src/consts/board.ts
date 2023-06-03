@@ -1,7 +1,7 @@
-import { PLAYER } from './player';
+import { GamePlayer } from './player';
 
-export enum CellState {
+export enum BoardCellState {
   EMPTY = 0,
-  BLUE_CHECKER = PLAYER.BLUE,
-  RED_CHECKER = PLAYER.RED,
+  BLUE_CHECKER = GamePlayer.BLUE,
+  RED_CHECKER = GamePlayer.RED,
 }

@@ -1,6 +1,11 @@
 import React from 'react';
 import { AppRoutes } from 'routes';
+import { BoardContextProvider } from 'contexts/board';
 
 export const App: React.FC = () => {
-  return <AppRoutes />;
+  return (
+    <BoardContextProvider>
+      <AppRoutes />
+    </BoardContextProvider>
+  );
 };
