@@ -1,5 +1,6 @@
 import React from 'react';
+import { AppRoutes } from 'routes';
 
 export const App: React.FC = () => {
-  return <div>Play Checker Game App</div>;
+  return <AppRoutes />;
 };
