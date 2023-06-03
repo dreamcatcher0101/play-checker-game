@@ -1,0 +1,27 @@
+{
+  "tabWidth": 2,
+  "useTabs": false,
+  "bracketSpacing": true,
+  "printWidth": 80,
+  "semi": true,
+  "trailingComma": "es5",
+  "jsxSingleQuote": true,
+  "singleQuote": true,
+  "importOrder": [
+    "@/(.*)",
+    "<THIRD_PARTY_MODULES>",
+    "^[./]",
+    "^routes",
+    "^pages",
+    "^controllers",
+    "^components",
+    "^contexts",
+    "^hooks",
+    "^config",
+    "^constants",
+    "^utils"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "importOrderParserPlugins": ["typescript", "decorators-legacy"]
+}
