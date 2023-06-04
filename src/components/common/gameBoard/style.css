@@ -1,0 +1,17 @@
+.game-board {
+  margin: 10px;
+  text-align: center;
+}
+
+.game-board__container {
+  border-spacing: 0px;
+  display: inline-block;
+}
+
+.game-board-content__container {
+  width: 100%;
+}
+
+.board-row__container {
+  /* display: flex; */
+}
