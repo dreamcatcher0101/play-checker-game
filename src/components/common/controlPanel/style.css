@@ -1,6 +1,7 @@
 .control-panel__container {
   display: grid;
   gap: 20px;
+  align-self: center;
 }
 
 .control-button__container {
