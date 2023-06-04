@@ -1,0 +1,29 @@
+.board-cell__container {
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  display: inline-block;
+  margin: 2px;
+}
+
+.board-cell__item {
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+}
+
+.cell-dark {
+  background-color: black;
+}
+
+.cell-light {
+  background-color: #e3b778;
+}
+
+.cell-blue {
+  background-color: blue;
+}
+
+.cell-red {
+  background-color: red;
+}

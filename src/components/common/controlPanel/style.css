@@ -1,0 +1,18 @@
+.control-panel__container {
+  display: grid;
+  gap: 20px;
+  align-self: center;
+}
+
+.control-button__container {
+  width: 200px;
+  border-radius: 12px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: lightblue;
+  cursor: pointer;
+}
+
+.control-button__container:hover {
+  background-color: lightcoral;
+}
