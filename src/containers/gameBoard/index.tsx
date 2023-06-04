@@ -1,6 +1,6 @@
 import React from 'react';
-import { GameBoardComponent } from 'components';
+import { GameBoardView } from 'components';
 
 export const GameBoardContainer: React.FC = () => {
-  return <GameBoardComponent />;
+  return <GameBoardView />;
 };
