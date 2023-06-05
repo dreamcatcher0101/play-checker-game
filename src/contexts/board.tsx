@@ -1,7 +1,7 @@
-import { BoardCellState, BoardSize, GamePlayer } from 'consts';
+import { BoardSize, GamePlayer } from 'consts';
 import React, { useState } from 'react';
 import { CheckerPosition } from 'types';
-import { GameBoard } from 'utils';
+import { gameBoard } from 'utils';
 
 interface BoardContextProviderProps {
   children: React.ReactNode;
@@ -11,15 +11,22 @@ interface BoardContextType {
   boardState: number[][];
   boardSize: number;
   playerTurn: GamePlayer;
-  moveBall: (from: CheckerPosition, to: CheckerPosition) => void;
+  moveChecker: (
+    fromPosition: CheckerPosition,
+    toPosition: CheckerPosition
+  ) => void;
+  setBoardSize: (size: number) => void;
 }
 
 export const BoardContext = React.createContext<BoardContextType>({
   boardState: [],
   boardSize: BoardSize.SMALL,
   playerTurn: GamePlayer.BLUE,
-  moveBall: () => {
+  moveChecker: () => {
     // Move the ball to a new position
+  },
+  setBoardSize: () => {
+    // Set the size of game board
   },
 });
 
@@ -27,18 +34,18 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
   children,
 }) => {
   const [boardSize, setBoardSize] = useState<number>(BoardSize.SMALL);
-  const [boardState, setBoardState] = useState<number[][]>(
-    GameBoard.getNewBoard(boardSize)
-  );
-  const [playerTurn, setPlayerTurn] = useState<GamePlayer>(GamePlayer.BLUE);
+  const [boardState, setBoardState] = useState<number[][]>(gameBoard.state);
+  const [playerTurn] = useState<GamePlayer>(GamePlayer.BLUE);
 
-  const moveBall = (from: CheckerPosition, to: CheckerPosition) => {
-    const newBoardState = boardState.map((row) => row.map((cell) => cell));
-    newBoardState[to.row][to.col] = newBoardState[from.row][from.col];
-    newBoardState[from.row][from.col] = BoardCellState.EMPTY;
-
-    boardState[from.row][from.col];
-    setPlayerTurn(3 - playerTurn);
+  const moveChecker = (
+    fromPosition: CheckerPosition,
+    toPosition: CheckerPosition
+  ) => {
+    const result = gameBoard.canMoveChecker(fromPosition, toPosition);
+    if (result.isStateUpdated && result.newBoardState) {
+      setBoardState(result.newBoardState);
+      gameBoard.setNewBoardState(result.newBoardState);
+    }
   };
 
   return (
@@ -47,7 +54,8 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
         boardState,
         boardSize,
         playerTurn,
-        moveBall,
+        moveChecker,
+        setBoardSize,
       }}
     >
       {children}

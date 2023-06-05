@@ -6,6 +6,7 @@
 .game-board__container {
   border-spacing: 0px;
   display: inline-block;
+  cursor: not-allowed;
 }
 
 .game-board-content__container {

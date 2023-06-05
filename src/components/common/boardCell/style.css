@@ -1,9 +1,8 @@
 .board-cell__container {
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   padding: 4px;
   display: inline-block;
-  margin: 2px;
 }
 
 .board-cell__item {
@@ -13,11 +12,21 @@
 }
 
 .cell-dark {
-  background-color: black;
+  background: radial-gradient(#222 15%, transparent 16%) 0 0,
+    radial-gradient(#222 15%, transparent 16%) 8px 8px,
+    radial-gradient(rgba(255, 255, 255, 0.1) 15%, transparent 20%) 0 1px,
+    radial-gradient(rgba(255, 255, 255, 0.1) 15%, transparent 20%) 8px 9px;
+  background-color: #222;
+  background-size: 12px 12px;
 }
 
 .cell-light {
-  background-color: #e3b778;
+  background: radial-gradient(#777 15%, transparent 16%) 0 0,
+    radial-gradient(#777 15%, transparent 16%) 6px 6px,
+    radial-gradient(rgba(220, 220, 220, 0.1) 15%, transparent 20%) 0 1px,
+    radial-gradient(rgba(220, 220, 220, 0.1) 15%, transparent 20%) 6px 6px;
+  background-color: #888;
+  background-size: 12px 12px;
 }
 
 .cell-blue {
@@ -26,4 +35,16 @@
 
 .cell-red {
   background-color: red;
+}
+
+.draggable {
+  cursor: grab;
+}
+
+.not-draggable {
+  cursor: not-allowed;
+}
+
+.on-drag {
+  background-color: gray;
 }
