@@ -1,6 +1,11 @@
 .game-board {
   margin: 10px;
   text-align: center;
+  display: grid;
+}
+
+.player-turn__container {
+  font-size: 18px;
 }
 
 .game-board__container {

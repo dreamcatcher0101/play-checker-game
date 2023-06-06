@@ -1,23 +1,28 @@
-import React from 'react';
+import { GamePlayer } from 'consts';
+import React, { useContext } from 'react';
 import './style.css';
 import { BoardCellComponent } from 'components/common';
+import { BoardContext } from 'contexts/board';
 
 export const GameBoardComponent: React.FC = () => {
+  const { board } = useContext(BoardContext);
+
   return (
     <div className="game-board">
+      <div className="player-turn__container">
+        {board.player === GamePlayer.BLUE
+          ? 'BLUE'
+          : board.player === GamePlayer.RED
+          ? 'RED'
+          : ''}
+        's turn!
+      </div>
       <table className="game-board__container">
         <tbody className="game-board-content__container">
-          {new Array(8).fill(0).map((_, row) => (
+          {board.cells.map((rowCells, row) => (
             <tr className="board-row__container" key={row}>
-              {new Array(8).fill(0).map((_, col) => (
-                <BoardCellComponent
-                  key={col}
-                  type={(row + col) % 2 ? 'light' : 'dark'}
-                  position={{
-                    row,
-                    col,
-                  }}
-                />
+              {rowCells.map((cell, col) => (
+                <BoardCellComponent key={col} cell={cell} />
               ))}
             </tr>
           ))}

@@ -8,7 +8,7 @@ import {
 
 export const GameBoardView: React.FC = () => {
   return (
-    <div className="game-board">
+    <div className="game-board-view">
       <ControlPanelComponent />
       <GameBoardComponent />
       <HistoryPanelComponent />
