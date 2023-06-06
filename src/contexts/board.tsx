@@ -1,4 +1,4 @@
-import { BoardCellState, BoardSize, GamePlayer } from 'consts';
+import { BoardSize } from 'consts';
 import React, { useState } from 'react';
 import { CheckerPosition } from 'types';
 import { GameBoard } from 'utils';
@@ -8,18 +8,29 @@ interface BoardContextProviderProps {
 }
 
 interface BoardContextType {
-  boardState: number[][];
   boardSize: number;
-  playerTurn: GamePlayer;
-  moveBall: (from: CheckerPosition, to: CheckerPosition) => void;
+  board: GameBoard;
+  highlightedPositions: CheckerPosition[];
+  highlightPositions: (position: CheckerPosition) => void;
+  setBoardSize: (size: number) => void;
+  moveChecker: (
+    fromPosition: CheckerPosition,
+    toPosition: CheckerPosition
+  ) => void;
 }
 
 export const BoardContext = React.createContext<BoardContextType>({
-  boardState: [],
   boardSize: BoardSize.SMALL,
-  playerTurn: GamePlayer.BLUE,
-  moveBall: () => {
-    // Move the ball to a new position
+  board: new GameBoard(),
+  highlightedPositions: [],
+  highlightPositions: () => {
+    // Highlight possible movements
+  },
+  setBoardSize: () => {
+    // Set the size of game board
+  },
+  moveChecker: () => {
+    // Move the ckecker
   },
 });
 
@@ -27,27 +38,39 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
   children,
 }) => {
   const [boardSize, setBoardSize] = useState<number>(BoardSize.SMALL);
-  const [boardState, setBoardState] = useState<number[][]>(
-    GameBoard.getNewBoard(boardSize)
-  );
-  const [playerTurn, setPlayerTurn] = useState<GamePlayer>(GamePlayer.BLUE);
+  const [board, setBoard] = useState<GameBoard>(new GameBoard());
+  const [highlightedPositions, setHighlightedPositions] = useState<
+    CheckerPosition[]
+  >([]);
 
-  const moveBall = (from: CheckerPosition, to: CheckerPosition) => {
-    const newBoardState = boardState.map((row) => row.map((cell) => cell));
-    newBoardState[to.row][to.col] = newBoardState[from.row][from.col];
-    newBoardState[from.row][from.col] = BoardCellState.EMPTY;
+  const moveChecker = (
+    fromPosition: CheckerPosition,
+    toPosition: CheckerPosition
+  ) => {
+    const fromCell = board.getCell(fromPosition);
+    fromCell.move(toPosition);
+    setBoard(board.getNewBoard());
+    setHighlightedPositions([]);
+  };
 
-    boardState[from.row][from.col];
-    setPlayerTurn(3 - playerTurn);
+  const highlightPositions = (position: CheckerPosition) => {
+    const cell = board.getCell(position);
+    if (cell.isTurn()) {
+      setHighlightedPositions(cell.getPossibleMovements());
+    } else {
+      setHighlightedPositions([]);
+    }
   };
 
   return (
     <BoardContext.Provider
       value={{
-        boardState,
+        board,
         boardSize,
-        playerTurn,
-        moveBall,
+        highlightedPositions,
+        highlightPositions,
+        setBoardSize,
+        moveChecker,
       }}
     >
       {children}
