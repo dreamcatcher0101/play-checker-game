@@ -2,7 +2,7 @@ import { GamePlayer } from 'consts';
 import React, { useContext } from 'react';
 import './style.css';
 import { BoardCellComponent } from 'components/common';
-import { BoardContext } from 'contexts/board';
+import { BoardContext } from 'contexts';
 
 export const GameBoardComponent: React.FC = () => {
   const { board } = useContext(BoardContext);
@@ -20,7 +20,7 @@ export const GameBoardComponent: React.FC = () => {
       <table className="game-board__container">
         <tbody className="game-board-content__container">
           {board.cells.map((rowCells, row) => (
-            <tr className="board-row__container" key={row}>
+            <tr key={row}>
               {rowCells.map((cell, col) => (
                 <BoardCellComponent key={col} cell={cell} />
               ))}

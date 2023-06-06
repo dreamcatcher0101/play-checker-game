@@ -17,6 +17,7 @@ interface BoardContextType {
     fromPosition: CheckerPosition,
     toPosition: CheckerPosition
   ) => void;
+  startNewGame: () => void;
 }
 
 export const BoardContext = React.createContext<BoardContextType>({
@@ -31,6 +32,9 @@ export const BoardContext = React.createContext<BoardContextType>({
   },
   moveChecker: () => {
     // Move the ckecker
+  },
+  startNewGame: () => {
+    // Start new game
   },
 });
 
@@ -62,6 +66,15 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
     }
   };
 
+  const startNewGame = () => {
+    setBoard(new GameBoard(boardSize));
+  };
+
+  const changeBoardSize = (boardSize: number) => {
+    setBoardSize(boardSize);
+    setBoard(new GameBoard(boardSize));
+  };
+
   return (
     <BoardContext.Provider
       value={{
@@ -69,8 +82,9 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
         boardSize,
         highlightedPositions,
         highlightPositions,
-        setBoardSize,
+        setBoardSize: changeBoardSize,
         moveChecker,
+        startNewGame,
       }}
     >
       {children}
