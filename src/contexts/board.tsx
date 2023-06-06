@@ -70,6 +70,11 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
     setBoard(new GameBoard(boardSize));
   };
 
+  const changeBoardSize = (boardSize: number) => {
+    setBoardSize(boardSize);
+    setBoard(new GameBoard(boardSize));
+  };
+
   return (
     <BoardContext.Provider
       value={{
@@ -77,7 +82,7 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
         boardSize,
         highlightedPositions,
         highlightPositions,
-        setBoardSize,
+        setBoardSize: changeBoardSize,
         moveChecker,
         startNewGame,
       }}

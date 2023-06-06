@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import { ConfirmModalComponent } from '../confirmModal';
+import { GameOptionsModalComponent } from '../optionsModal';
 import './style.css';
 import { BoardContext, ModalContext } from 'contexts';
 
 export const ControlPanelComponent: React.FC = () => {
-  const { startNewGame } = useContext(BoardContext);
+  const { startNewGame, setBoardSize } = useContext(BoardContext);
   const modal = useContext(ModalContext);
 
   const handleNewGame = () => {
@@ -25,12 +26,31 @@ export const ControlPanelComponent: React.FC = () => {
     );
   };
 
+  const handleOptions = () => {
+    modal.open(
+      <GameOptionsModalComponent
+        handleConfirm={(boardSize: number) => {
+          setBoardSize(boardSize);
+          modal.close();
+        }}
+        handleCancel={() => {
+          modal.close();
+        }}
+      />,
+      {
+        title: 'Game Options',
+      }
+    );
+  };
+
   return (
     <div className="control-panel__container">
       <div className="control-button__container" onClick={handleNewGame}>
         New Game
       </div>
-      <div className="control-button__container">Options</div>
+      <div className="control-button__container" onClick={handleOptions}>
+        Options
+      </div>
       <div className="control-button__container">Revert</div>
     </div>
   );
