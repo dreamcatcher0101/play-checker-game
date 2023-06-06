@@ -1,11 +1,13 @@
 import React from 'react';
 import { AppRoutes } from 'routes';
-import { BoardContextProvider } from 'contexts/board';
+import { BoardContextProvider, ModalContextProvider } from 'contexts';
 
 export const App: React.FC = () => {
   return (
     <BoardContextProvider>
-      <AppRoutes />
+      <ModalContextProvider>
+        <AppRoutes />
+      </ModalContextProvider>
     </BoardContextProvider>
   );
 };

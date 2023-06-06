@@ -1,4 +1,5 @@
 export * from './boardCell';
+export * from './confirmModal';
 export * from './controlPanel';
 export * from './footer';
 export * from './gameBoard';

@@ -2,7 +2,7 @@ import { BoardCellState } from 'consts';
 import React, { useMemo, useContext, DragEvent } from 'react';
 import { CheckerPosition } from 'types';
 import './style.css';
-import { BoardContext } from 'contexts/board';
+import { BoardContext } from 'contexts';
 import { BoardCell } from 'utils';
 
 interface BoardCellProps {

@@ -5,7 +5,7 @@
 }
 
 .player-turn__container {
-  font-size: 18px;
+  font-size: 24px;
 }
 
 .game-board__container {
@@ -16,8 +16,4 @@
 
 .game-board-content__container {
   width: 100%;
-}
-
-.board-row__container {
-  /* display: flex; */
 }
