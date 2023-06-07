@@ -55,7 +55,7 @@ export const BoardCellComponent: React.FC<BoardCellProps> = ({ cell }) => {
   };
 
   return (
-    <td
+    <div
       className={`board-cell__container cell-${type}`}
       onDrop={handleDrop}
       onDragOver={enableDropping}
@@ -74,6 +74,6 @@ export const BoardCellComponent: React.FC<BoardCellProps> = ({ cell }) => {
           isPossibleMovePosition ? 'available-position__item' : ''
         }`}
       ></div>
-    </td>
+    </div>
   );
 };
