@@ -1,7 +1,7 @@
 import { BoardCellState, BoardSize, GamePlayer } from 'consts';
 import { CheckerPosition } from 'types';
 import { BoardCell } from './cell';
-import { getNextPLayer } from './player';
+import { getNextPlayer } from './player';
 
 export class GameBoard {
   cells: BoardCell[][];
@@ -72,10 +72,11 @@ export class GameBoard {
           .reduce((result, value) => result + value, 0)
       )
       .reduce((result, value) => result + value, 0);
-    console.log(position, captureMovements);
+
     if (this.getCell(position).getPossibleCaptureMovements().length) {
       return true;
     }
+
     return (
       !captureMovements &&
       !!this.getCell(position).getPossibleMovements().length
@@ -84,6 +85,6 @@ export class GameBoard {
 
   /*------- Actions -------*/
   public changeTurn = () => {
-    this.player = getNextPLayer(this.player);
+    this.player = getNextPlayer(this.player);
   };
 }

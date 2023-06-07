@@ -1,7 +1,7 @@
 import { BoardSize } from 'consts';
 import React, { useState } from 'react';
 import { CheckerPosition } from 'types';
-import { GameBoard } from 'utils';
+import { GameBoard, getAIPlayerCheckerMovement } from 'utils';
 
 interface BoardContextProviderProps {
   children: React.ReactNode;
@@ -55,6 +55,15 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
       const fromCell = board.getCell(fromPosition);
       fromCell.move(toPosition);
       setBoard(board.getNewBoard());
+
+      const move = getAIPlayerCheckerMovement(board);
+      if (!move) {
+        board.changeTurn();
+      } else {
+        const fromCell = board.getCell(move.fromPosition);
+        fromCell.move(move.toPosition);
+        setBoard(board.getNewBoard());
+      }
     }
     setHighlightedPositions([]);
   };
