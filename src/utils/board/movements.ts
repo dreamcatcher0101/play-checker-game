@@ -42,7 +42,7 @@ const possibleMovements: Record<string, CheckerPosition[]> = {
   ],
 };
 
-export const getPossiblePositions = (
+export const getPossibleNormalPositions = (
   state: BoardCellState,
   position: CheckerPosition,
   boardSize: number
@@ -55,6 +55,37 @@ export const getPossiblePositions = (
   }));
 
   return positions.filter((pos) => !isOutOfBoard(pos, boardSize));
+};
+
+export const getPossibleCapturePositions = (
+  state: BoardCellState,
+  position: CheckerPosition,
+  boardSize: number
+): {
+  enemyCheckerPosition: CheckerPosition;
+  movedPosition: CheckerPosition;
+}[] => {
+  const offsets = possibleMovements[state] ?? [];
+
+  const positions: {
+    enemyCheckerPosition: CheckerPosition;
+    movedPosition: CheckerPosition;
+  }[] = offsets.map((offset) => ({
+    enemyCheckerPosition: {
+      row: position.row + offset.row,
+      col: position.col + offset.col,
+    },
+    movedPosition: {
+      row: position.row + offset.row * 2,
+      col: position.col + offset.col * 2,
+    },
+  }));
+
+  return positions.filter(
+    (pos) =>
+      !isOutOfBoard(pos.enemyCheckerPosition, boardSize) &&
+      !isOutOfBoard(pos.movedPosition, boardSize)
+  );
 };
 
 export const isOutOfBoard = (

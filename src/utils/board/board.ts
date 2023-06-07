@@ -11,7 +11,7 @@ export class GameBoard {
   constructor(
     boardSize: number = BoardSize.SMALL,
     cells: BoardCell[][] = [],
-    player: GamePlayer = GamePlayer.BLUE
+    player: GamePlayer = GamePlayer.RED
   ) {
     this.boardSize = boardSize;
 
@@ -58,6 +58,28 @@ export class GameBoard {
     position: CheckerPosition
   ): CheckerPosition[] => {
     return this.cells[position.row][position.col].getPossibleMovements();
+  };
+
+  /*------- Status -------*/
+  public isAvailableToMove = (position: CheckerPosition): boolean => {
+    const captureMovements = this.cells
+      .map((cellRow) =>
+        cellRow
+          .filter(
+            (cell) => cell.row !== position.row || cell.col !== position.col
+          )
+          .map((cell) => cell.getPossibleCaptureMovements().length)
+          .reduce((result, value) => result + value, 0)
+      )
+      .reduce((result, value) => result + value, 0);
+    console.log(position, captureMovements);
+    if (this.getCell(position).getPossibleCaptureMovements().length) {
+      return true;
+    }
+    return (
+      !captureMovements &&
+      !!this.getCell(position).getPossibleMovements().length
+    );
   };
 
   /*------- Actions -------*/

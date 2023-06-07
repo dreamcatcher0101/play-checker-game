@@ -5,7 +5,10 @@ import {
 } from 'consts';
 import { CheckerPosition } from 'types';
 import { GameBoard } from './board';
-import { getPossiblePositions } from './movements';
+import {
+  getPossibleNormalPositions,
+  getPossibleCapturePositions,
+} from './movements';
 
 export class BoardCell {
   row: number;
@@ -27,14 +30,20 @@ export class BoardCell {
 
   /*------- Getter -------*/
   public getPossibleMovements = (): CheckerPosition[] => {
-    return [
-      ...this.getPossibleNormalMovements(),
-      ...this.getPossibleCaptureMovements(),
-    ];
+    const normalMovements = this.getPossibleNormalMovements();
+    const captureMovements = this.getPossibleCaptureMovements();
+    if (captureMovements.length) {
+      return captureMovements.map((positions) => positions.movedPosition);
+    } else {
+      return normalMovements;
+    }
   };
 
   public getPossibleNormalMovements = (): CheckerPosition[] => {
-    const possiblePositions = getPossiblePositions(
+    if (!this.isTurn()) {
+      return [];
+    }
+    const possiblePositions = getPossibleNormalPositions(
       this.state,
       {
         row: this.row,
@@ -48,8 +57,27 @@ export class BoardCell {
     );
   };
 
-  public getPossibleCaptureMovements = (): CheckerPosition[] => {
-    return [];
+  public getPossibleCaptureMovements = (): {
+    enemyCheckerPosition: CheckerPosition;
+    movedPosition: CheckerPosition;
+  }[] => {
+    if (!this.isTurn()) {
+      return [];
+    }
+    const possiblePositions = getPossibleCapturePositions(
+      this.state,
+      {
+        row: this.row,
+        col: this.col,
+      },
+      this.board.boardSize
+    );
+
+    return possiblePositions.filter(
+      (positions) =>
+        this.board.getCell(positions.movedPosition).isEmpty() &&
+        this.isEmeny(this.board.getCell(positions.enemyCheckerPosition))
+    );
   };
 
   /*------- Status -------*/
@@ -58,13 +86,6 @@ export class BoardCell {
       (this.board.player === GamePlayer.BLUE && this.isBlue()) ||
       (this.board.player === GamePlayer.RED && this.isRed())
     );
-  };
-
-  public isAvailableToMove = (): boolean => {
-    if (!this.isTurn()) {
-      return false;
-    }
-    return !!this.getPossibleMovements().length;
   };
 
   public isEmpty = (): boolean => {
@@ -97,34 +118,32 @@ export class BoardCell {
 
   /*------- Actions -------*/
   public move = (toPosition: CheckerPosition) => {
-    if (this.isAvailableToMove()) {
-      if (
-        this.getPossibleNormalMovements().filter(
-          (position) =>
-            position.row === toPosition.row && position.col === toPosition.col
-        ).length
-      ) {
-        this.board.getCell(toPosition).state = this.state;
-        this.state = BoardCellState.EMPTY;
-        this.board.changeTurn();
-      } else if (
-        this.getPossibleCaptureMovements().filter(
-          (position) =>
-            position.row === toPosition.row && position.col === toPosition.col
-        ).length
-      ) {
-        const offset: CheckerPosition = {
-          row: toPosition.row - this.row,
-          col: toPosition.col - this.col,
-        };
-        const enemyCheckerPosition: CheckerPosition = {
-          row: this.row + offset.row / 2,
-          col: this.col + offset.col / 2,
-        };
-        this.board.getCell(toPosition).state = this.state;
-        this.board.getCell(enemyCheckerPosition).state = this.state;
-        this.state = BoardCellState.EMPTY;
-      }
+    if (
+      this.getPossibleNormalMovements().filter(
+        (position) =>
+          position.row === toPosition.row && position.col === toPosition.col
+      ).length
+    ) {
+      this.board.getCell(toPosition).state = this.state;
+      this.state = BoardCellState.EMPTY;
+      this.board.changeTurn();
+    } else if (
+      this.getPossibleCaptureMovements().filter(
+        (positions) =>
+          positions.movedPosition.row === toPosition.row &&
+          positions.movedPosition.col === toPosition.col
+      ).length
+    ) {
+      const [position] = this.getPossibleCaptureMovements().filter(
+        (positions) =>
+          positions.movedPosition.row === toPosition.row &&
+          positions.movedPosition.col === toPosition.col
+      );
+      this.board.getCell(position.movedPosition).state = this.state;
+      this.board.getCell(position.enemyCheckerPosition).state =
+        BoardCellState.EMPTY;
+      this.state = BoardCellState.EMPTY;
+      this.board.changeTurn();
     }
   };
 

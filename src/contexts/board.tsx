@@ -1,5 +1,5 @@
 import { BoardSize } from 'consts';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckerPosition } from 'types';
 import { GameBoard } from 'utils';
 
@@ -51,15 +51,17 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
     fromPosition: CheckerPosition,
     toPosition: CheckerPosition
   ) => {
-    const fromCell = board.getCell(fromPosition);
-    fromCell.move(toPosition);
-    setBoard(board.getNewBoard());
+    if (board.isAvailableToMove(fromPosition)) {
+      const fromCell = board.getCell(fromPosition);
+      fromCell.move(toPosition);
+      setBoard(board.getNewBoard());
+    }
     setHighlightedPositions([]);
   };
 
   const highlightPositions = (position: CheckerPosition) => {
     const cell = board.getCell(position);
-    if (cell.isTurn()) {
+    if (board.isAvailableToMove(position)) {
       setHighlightedPositions(cell.getPossibleMovements());
     } else {
       setHighlightedPositions([]);
@@ -74,6 +76,12 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
     setBoardSize(boardSize);
     setBoard(new GameBoard(boardSize));
   };
+
+  useEffect(() => {
+    moveChecker({ row: 5, col: 0 }, { row: 4, col: 1 });
+    moveChecker({ row: 2, col: 3 }, { row: 3, col: 2 });
+    moveChecker({ row: 4, col: 1 }, { row: 2, col: 3 });
+  }, []);
 
   return (
     <BoardContext.Provider

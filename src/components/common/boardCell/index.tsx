@@ -10,16 +10,22 @@ interface BoardCellProps {
 }
 
 export const BoardCellComponent: React.FC<BoardCellProps> = ({ cell }) => {
-  const { highlightPositions, highlightedPositions, moveChecker } =
+  const { board, highlightPositions, highlightedPositions, moveChecker } =
     useContext(BoardContext);
 
-  const { type, state, isAvailableToMove } = useMemo(() => {
+  const { type, state } = useMemo(() => {
     return {
       type: (cell.row + cell.col) % 2 ? 'light' : 'dark',
       state: cell.state,
-      isAvailableToMove: cell.isAvailableToMove(),
     };
   }, [cell]);
+
+  const isAvailableToMove = useMemo(() => {
+    return board.isAvailableToMove({
+      row: cell.row,
+      col: cell.col,
+    });
+  }, [board]);
 
   const isPossibleMovePosition = useMemo(() => {
     return !!highlightedPositions.filter(
