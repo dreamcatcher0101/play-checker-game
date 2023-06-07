@@ -17,3 +17,16 @@
 .game-board-content__container {
   width: 100%;
 }
+
+.table-blank-item__container {
+  width: 24px;
+  height: 24px;
+}
+
+.th-title__container {
+  height: 24px;
+}
+
+.td-title__container {
+  width: 24px;
+}

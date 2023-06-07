@@ -1,6 +1,7 @@
 .board-cell__container {
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
+  /* aspect-ratio: 1 / 1; */
   padding: 12px;
   display: inline-flex;
   align-items: center;
@@ -14,8 +15,8 @@
 }
 
 .available-position__item {
-  width: 24px;
-  height: 24px;
+  width: 100%;
+  height: 100%;
   border: 3px solid white;
   box-sizing: border-box;
   animation: scaling 2s linear infinite;
