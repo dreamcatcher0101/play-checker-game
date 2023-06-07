@@ -124,6 +124,16 @@ export class BoardCell {
           position.row === toPosition.row && position.col === toPosition.col
       ).length
     ) {
+      this.board.addHistory({
+        player: this.board.player,
+        fromPosition: {
+          row: this.row,
+          col: this.col,
+        },
+        toPosition,
+        capturedChecker: [],
+      });
+
       this.board.getCell(toPosition).state = this.state;
       this.state = BoardCellState.EMPTY;
       this.board.changeTurn();
@@ -139,6 +149,22 @@ export class BoardCell {
           positions.movedPosition.row === toPosition.row &&
           positions.movedPosition.col === toPosition.col
       );
+
+      this.board.addHistory({
+        player: this.board.player,
+        fromPosition: {
+          row: this.row,
+          col: this.col,
+        },
+        toPosition,
+        capturedChecker: [
+          {
+            position: position.enemyCheckerPosition,
+            state: this.board.getCell(position.enemyCheckerPosition).state,
+          },
+        ],
+      });
+
       this.board.getCell(position.movedPosition).state = this.state;
       this.board.getCell(position.enemyCheckerPosition).state =
         BoardCellState.EMPTY;

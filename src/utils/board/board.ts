@@ -3,15 +3,28 @@ import { CheckerPosition } from 'types';
 import { BoardCell } from './cell';
 import { getNextPlayer } from './player';
 
+interface MovementHistory {
+  player: GamePlayer;
+  fromPosition: CheckerPosition;
+  toPosition: CheckerPosition;
+  capturedChecker: {
+    position: CheckerPosition;
+    state: BoardCellState;
+  }[];
+}
+
 export class GameBoard {
   cells: BoardCell[][];
   boardSize: number;
   player: GamePlayer;
 
+  movementHistory: MovementHistory[];
+
   constructor(
     boardSize: number = BoardSize.SMALL,
     cells: BoardCell[][] = [],
-    player: GamePlayer = GamePlayer.RED
+    player: GamePlayer = GamePlayer.RED,
+    movementHistory: MovementHistory[] = []
   ) {
     this.boardSize = boardSize;
 
@@ -43,6 +56,7 @@ export class GameBoard {
     );
 
     this.player = player;
+    this.movementHistory = movementHistory;
   }
 
   /*------- Getter -------*/
@@ -51,7 +65,12 @@ export class GameBoard {
   };
 
   public getNewBoard = (): GameBoard => {
-    return new GameBoard(this.boardSize, this.cells, this.player);
+    return new GameBoard(
+      this.boardSize,
+      this.cells,
+      this.player,
+      this.movementHistory
+    );
   };
 
   public getPossibleMovePositions = (
@@ -86,5 +105,9 @@ export class GameBoard {
   /*------- Actions -------*/
   public changeTurn = () => {
     this.player = getNextPlayer(this.player);
+  };
+
+  public addHistory = (history: MovementHistory) => {
+    this.movementHistory.push(history);
   };
 }
