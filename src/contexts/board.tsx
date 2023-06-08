@@ -18,6 +18,7 @@ interface BoardContextType {
     toPosition: CheckerPosition
   ) => void;
   startNewGame: () => void;
+  revertMove: () => void;
 }
 
 export const BoardContext = React.createContext<BoardContextType>({
@@ -35,6 +36,9 @@ export const BoardContext = React.createContext<BoardContextType>({
   },
   startNewGame: () => {
     // Start new game
+  },
+  revertMove: () => {
+    // Revert the last move
   },
 });
 
@@ -68,6 +72,11 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
     setHighlightedPositions([]);
   };
 
+  const revertMove = () => {
+    board.revertLastMove();
+    setBoard(board.getNewBoard());
+  };
+
   const highlightPositions = (position: CheckerPosition) => {
     const cell = board.getCell(position);
     if (board.isAvailableToMove(position)) {
@@ -96,6 +105,7 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
         setBoardSize: changeBoardSize,
         moveChecker,
         startNewGame,
+        revertMove,
       }}
     >
       {children}

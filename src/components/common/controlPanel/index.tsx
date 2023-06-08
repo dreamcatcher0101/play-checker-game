@@ -5,7 +5,7 @@ import './style.css';
 import { BoardContext, ModalContext } from 'contexts';
 
 export const ControlPanelComponent: React.FC = () => {
-  const { startNewGame, setBoardSize } = useContext(BoardContext);
+  const { startNewGame, setBoardSize, revertMove } = useContext(BoardContext);
   const modal = useContext(ModalContext);
 
   const handleNewGame = () => {
@@ -43,6 +43,10 @@ export const ControlPanelComponent: React.FC = () => {
     );
   };
 
+  const handleRevert = () => {
+    revertMove();
+  };
+
   return (
     <div className="control-panel__container">
       <div className="control-button__container" onClick={handleNewGame}>
@@ -51,7 +55,9 @@ export const ControlPanelComponent: React.FC = () => {
       <div className="control-button__container" onClick={handleOptions}>
         Options
       </div>
-      <div className="control-button__container">Revert</div>
+      <div className="control-button__container" onClick={handleRevert}>
+        Revert
+      </div>
     </div>
   );
 };

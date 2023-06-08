@@ -5,6 +5,7 @@ import { getNextPlayer } from './player';
 
 interface MovementHistory {
   player: GamePlayer;
+  state: BoardCellState;
   fromPosition: CheckerPosition;
   toPosition: CheckerPosition;
   capturedChecker: {
@@ -109,5 +110,24 @@ export class GameBoard {
 
   public addHistory = (history: MovementHistory) => {
     this.movementHistory.push(history);
+  };
+
+  public revertLastMove = () => {
+    const lastMovements = this.movementHistory.slice(-2);
+
+    this.movementHistory = this.movementHistory.slice(
+      0,
+      this.movementHistory.length - lastMovements.length
+    );
+
+    lastMovements.reverse().forEach((move) => {
+      this.getCell(move.fromPosition).state = move.state;
+      this.getCell(move.toPosition).state = BoardCellState.EMPTY;
+
+      move.capturedChecker.forEach((checker) => {
+        this.getCell(checker.position).state = checker.state;
+      });
+      this.changeTurn();
+    });
   };
 }
