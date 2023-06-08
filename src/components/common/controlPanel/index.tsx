@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { ConfirmModalComponent } from '../confirmModal';
 import { GameOptionsModalComponent } from '../optionsModal';
+import { PlayTimePanelComponent } from './playTimePanel';
 import './style.css';
 import { BoardContext, ModalContext } from 'contexts';
 
@@ -58,6 +59,7 @@ export const ControlPanelComponent: React.FC = () => {
       <div className="control-button__container" onClick={handleRevert}>
         Revert
       </div>
+      <PlayTimePanelComponent />
     </div>
   );
 };
