@@ -116,6 +116,13 @@ export class BoardCell {
     }
   };
 
+  public isKing = (): boolean => {
+    return (
+      this.state === BoardCellState.RED_KING_CHECKER ||
+      this.state === BoardCellState.BLUE_KING_CHECKER
+    );
+  };
+
   /*------- Actions -------*/
   public move = (toPosition: CheckerPosition) => {
     if (
@@ -173,9 +180,17 @@ export class BoardCell {
       this.state = BoardCellState.EMPTY;
       this.board.changeTurn();
     }
+
+    this.board.updateCells();
   };
 
   public makeKing = () => {
+    if (this.isBlue() && this.row !== this.board.boardSize - 1) {
+      return;
+    }
+    if (this.isRed() && this.row !== 0) {
+      return;
+    }
     if (
       this.state === BoardCellState.BLUE_CHECKER ||
       this.state === BoardCellState.RED_CHECKER

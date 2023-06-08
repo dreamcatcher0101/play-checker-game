@@ -147,7 +147,7 @@ export class GameBoard {
     });
   };
 
-  saveToLS = () => {
+  public saveToLS = () => {
     localStorage.setItem('boardSize', this.boardSize.toString());
     localStorage.setItem(
       'cells',
@@ -168,18 +168,26 @@ export class GameBoard {
     );
   };
 
-  loadFromLS = () => {
+  public loadFromLS = () => {
     const boardSize = Number(
       localStorage.getItem('boardSize') ?? BoardSize.SMALL
     );
     const cells: BoardCell[][] = JSON.parse(
       localStorage.getItem('cells') ?? '[]'
     );
-    const player = Number(localStorage.getItem('player')) ?? GamePlayer.RED;
+    const player = Number(localStorage.getItem('player') ?? GamePlayer.RED);
     const movementHistory = JSON.parse(
       localStorage.getItem('movementHistory') ?? '[]'
     );
 
     return new GameBoard(boardSize, cells, player, movementHistory);
+  };
+
+  public updateCells = () => {
+    this.cells.forEach((cellRow) =>
+      cellRow.forEach((cell) => {
+        cell.makeKing();
+      })
+    );
   };
 }
