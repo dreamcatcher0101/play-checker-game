@@ -126,6 +126,7 @@ export class BoardCell {
     ) {
       this.board.addHistory({
         player: this.board.player,
+        state: this.state,
         fromPosition: {
           row: this.row,
           col: this.col,
@@ -152,6 +153,7 @@ export class BoardCell {
 
       this.board.addHistory({
         player: this.board.player,
+        state: this.state,
         fromPosition: {
           row: this.row,
           col: this.col,

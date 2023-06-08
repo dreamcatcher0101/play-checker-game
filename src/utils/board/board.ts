@@ -5,6 +5,7 @@ import { getNextPlayer } from './player';
 
 interface MovementHistory {
   player: GamePlayer;
+  state: BoardCellState;
   fromPosition: CheckerPosition;
   toPosition: CheckerPosition;
   capturedChecker: {
@@ -65,12 +66,14 @@ export class GameBoard {
   };
 
   public getNewBoard = (): GameBoard => {
-    return new GameBoard(
+    const board = new GameBoard(
       this.boardSize,
       this.cells,
       this.player,
       this.movementHistory
     );
+    board.saveToLS();
+    return board;
   };
 
   public getPossibleMovePositions = (
@@ -80,26 +83,40 @@ export class GameBoard {
   };
 
   /*------- Status -------*/
-  public isAvailableToMove = (position: CheckerPosition): boolean => {
+  public isAvailableToMove = (
+    fromPosition: CheckerPosition,
+    toPosition: CheckerPosition | null = null
+  ): boolean => {
     const captureMovements = this.cells
       .map((cellRow) =>
         cellRow
           .filter(
-            (cell) => cell.row !== position.row || cell.col !== position.col
+            (cell) =>
+              cell.row !== fromPosition.row || cell.col !== fromPosition.col
           )
           .map((cell) => cell.getPossibleCaptureMovements().length)
           .reduce((result, value) => result + value, 0)
       )
       .reduce((result, value) => result + value, 0);
 
-    if (this.getCell(position).getPossibleCaptureMovements().length) {
+    if (this.getCell(fromPosition).getPossibleCaptureMovements().length) {
       return true;
     }
 
-    return (
-      !captureMovements &&
-      !!this.getCell(position).getPossibleMovements().length
-    );
+    let flag = !captureMovements;
+    if (toPosition) {
+      flag =
+        flag &&
+        !!this.getCell(fromPosition)
+          .getPossibleMovements()
+          .filter(
+            (position) =>
+              position.row === toPosition.row && position.col === toPosition.col
+          ).length;
+    } else {
+      flag = flag && !!this.getCell(fromPosition).getPossibleMovements().length;
+    }
+    return flag;
   };
 
   /*------- Actions -------*/
@@ -109,5 +126,59 @@ export class GameBoard {
 
   public addHistory = (history: MovementHistory) => {
     this.movementHistory.push(history);
+  };
+
+  public revertLastMove = () => {
+    const lastMovements = this.movementHistory.slice(-2);
+
+    this.movementHistory = this.movementHistory.slice(
+      0,
+      this.movementHistory.length - lastMovements.length
+    );
+
+    lastMovements.reverse().forEach((move) => {
+      this.getCell(move.fromPosition).state = move.state;
+      this.getCell(move.toPosition).state = BoardCellState.EMPTY;
+
+      move.capturedChecker.forEach((checker) => {
+        this.getCell(checker.position).state = checker.state;
+      });
+      this.changeTurn();
+    });
+  };
+
+  saveToLS = () => {
+    localStorage.setItem('boardSize', this.boardSize.toString());
+    localStorage.setItem(
+      'cells',
+      JSON.stringify(
+        this.cells.map((cellRow) =>
+          cellRow.map((cell) => ({
+            row: cell.row,
+            col: cell.col,
+            state: cell.state,
+          }))
+        )
+      )
+    );
+    localStorage.setItem('player', this.player.toString());
+    localStorage.setItem(
+      'movementHistory',
+      JSON.stringify(this.movementHistory)
+    );
+  };
+
+  loadFromLS = () => {
+    const boardSize =
+      Number(localStorage.getItem('boardSize')) ?? BoardSize.SMALL;
+    const cells: BoardCell[][] = JSON.parse(
+      localStorage.getItem('cells') ?? '[]'
+    );
+    const player = Number(localStorage.getItem('player')) ?? GamePlayer.RED;
+    const movementHistory = JSON.parse(
+      localStorage.getItem('movementHistory') ?? '[]'
+    );
+
+    return new GameBoard(boardSize, cells, player, movementHistory);
   };
 }

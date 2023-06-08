@@ -1,5 +1,5 @@
 import { BoardSize } from 'consts';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckerPosition } from 'types';
 import { GameBoard, getAIPlayerCheckerMovement } from 'utils';
 
@@ -18,6 +18,7 @@ interface BoardContextType {
     toPosition: CheckerPosition
   ) => void;
   startNewGame: () => void;
+  revertMove: () => void;
 }
 
 export const BoardContext = React.createContext<BoardContextType>({
@@ -36,6 +37,9 @@ export const BoardContext = React.createContext<BoardContextType>({
   startNewGame: () => {
     // Start new game
   },
+  revertMove: () => {
+    // Revert the last move
+  },
 });
 
 export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
@@ -51,7 +55,8 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
     fromPosition: CheckerPosition,
     toPosition: CheckerPosition
   ) => {
-    if (board.isAvailableToMove(fromPosition)) {
+    console.log(board.isAvailableToMove(fromPosition, toPosition));
+    if (board.isAvailableToMove(fromPosition, toPosition)) {
       const fromCell = board.getCell(fromPosition);
       fromCell.move(toPosition);
       setBoard(board.getNewBoard());
@@ -66,6 +71,11 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
       }
     }
     setHighlightedPositions([]);
+  };
+
+  const revertMove = () => {
+    board.revertLastMove();
+    setBoard(board.getNewBoard());
   };
 
   const highlightPositions = (position: CheckerPosition) => {
@@ -86,6 +96,10 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
     setBoard(new GameBoard(boardSize));
   };
 
+  useEffect(() => {
+    setBoard(board.loadFromLS());
+  }, []);
+
   return (
     <BoardContext.Provider
       value={{
@@ -96,6 +110,7 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
         setBoardSize: changeBoardSize,
         moveChecker,
         startNewGame,
+        revertMove,
       }}
     >
       {children}
