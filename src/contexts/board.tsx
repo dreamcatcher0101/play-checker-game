@@ -55,7 +55,6 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
     fromPosition: CheckerPosition,
     toPosition: CheckerPosition
   ) => {
-    console.log(board.isAvailableToMove(fromPosition, toPosition));
     if (board.isAvailableToMove(fromPosition, toPosition)) {
       const fromCell = board.getCell(fromPosition);
       if (
@@ -99,12 +98,16 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
   };
 
   const startNewGame = () => {
-    setBoard(new GameBoard(boardSize));
+    const board = new GameBoard(boardSize);
+    board.saveToLS();
+    setBoard(board);
   };
 
   const changeBoardSize = (boardSize: number) => {
     setBoardSize(boardSize);
-    setBoard(new GameBoard(boardSize));
+    const board = new GameBoard(boardSize);
+    board.saveToLS();
+    setBoard(board);
   };
 
   useEffect(() => {

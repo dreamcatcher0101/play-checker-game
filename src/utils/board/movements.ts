@@ -22,7 +22,25 @@ const possibleMovements: Record<string, CheckerPosition[]> = {
       col: -1,
     },
   ],
-  [BoardCellState.BLUE_KING_CHECKER || BoardCellState.RED_KING_CHECKER]: [
+  [BoardCellState.BLUE_KING_CHECKER]: [
+    {
+      row: 1,
+      col: 1,
+    },
+    {
+      row: 1,
+      col: -1,
+    },
+    {
+      row: -1,
+      col: 1,
+    },
+    {
+      row: -1,
+      col: -1,
+    },
+  ],
+  [BoardCellState.RED_KING_CHECKER]: [
     {
       row: 1,
       col: 1,

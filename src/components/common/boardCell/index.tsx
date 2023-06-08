@@ -13,10 +13,11 @@ export const BoardCellComponent: React.FC<BoardCellProps> = ({ cell }) => {
   const { board, highlightPositions, highlightedPositions, moveChecker } =
     useContext(BoardContext);
 
-  const { type, state } = useMemo(() => {
+  const { type, state, isKing } = useMemo(() => {
     return {
       type: (cell.row + cell.col) % 2 ? 'light' : 'dark',
       state: cell.state,
+      isKing: cell.isKing(),
     };
   }, [cell]);
 
@@ -65,15 +66,19 @@ export const BoardCellComponent: React.FC<BoardCellProps> = ({ cell }) => {
         onDragStart={handleDragStart}
         onMouseOver={handleMouseOver}
         className={`board-cell__item ${
-          state === BoardCellState.BLUE_CHECKER
+          state === BoardCellState.BLUE_CHECKER ||
+          state === BoardCellState.BLUE_KING_CHECKER
             ? 'cell-blue'
-            : state === BoardCellState.RED_CHECKER
+            : state === BoardCellState.RED_CHECKER ||
+              state === BoardCellState.RED_KING_CHECKER
             ? 'cell-red'
             : ''
         } ${isAvailableToMove ? 'draggable' : 'not-draggable'} ${
           isPossibleMovePosition ? 'available-position__item' : ''
         }`}
-      ></div>
+      >
+        {isKing && 'KING'}
+      </div>
     </div>
   );
 };
