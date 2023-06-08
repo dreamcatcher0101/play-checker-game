@@ -6,7 +6,8 @@ import './style.css';
 import { BoardContext, ModalContext } from 'contexts';
 
 export const ControlPanelComponent: React.FC = () => {
-  const { startNewGame, setBoardSize, revertMove } = useContext(BoardContext);
+  const { board, startNewGame, setBoardSize, revertMove } =
+    useContext(BoardContext);
   const modal = useContext(ModalContext);
 
   const handleNewGame = () => {
@@ -60,6 +61,9 @@ export const ControlPanelComponent: React.FC = () => {
         Revert
       </div>
       <PlayTimePanelComponent />
+      <div className="moves-number__container">
+        Number of moves: {board.numberOfMoves}
+      </div>
     </div>
   );
 };
