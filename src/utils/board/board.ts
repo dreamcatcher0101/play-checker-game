@@ -169,8 +169,9 @@ export class GameBoard {
   };
 
   loadFromLS = () => {
-    const boardSize =
-      Number(localStorage.getItem('boardSize')) ?? BoardSize.SMALL;
+    const boardSize = Number(
+      localStorage.getItem('boardSize') ?? BoardSize.SMALL
+    );
     const cells: BoardCell[][] = JSON.parse(
       localStorage.getItem('cells') ?? '[]'
     );
