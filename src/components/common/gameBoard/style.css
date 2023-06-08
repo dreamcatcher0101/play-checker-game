@@ -21,12 +21,15 @@
 .table-blank-item__container {
   width: 24px;
   height: 24px;
+  user-select: none;
 }
 
 .th-title__container {
   height: 24px;
+  user-select: none;
 }
 
 .td-title__container {
   width: 24px;
+  user-select: none;
 }

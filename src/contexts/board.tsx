@@ -58,16 +58,27 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
     console.log(board.isAvailableToMove(fromPosition, toPosition));
     if (board.isAvailableToMove(fromPosition, toPosition)) {
       const fromCell = board.getCell(fromPosition);
-      fromCell.move(toPosition);
-      setBoard(board.getNewBoard());
-
-      const move = getAIPlayerCheckerMovement(board);
-      if (!move) {
-        board.changeTurn();
-      } else {
-        const fromCell = board.getCell(move.fromPosition);
-        fromCell.move(move.toPosition);
+      if (
+        fromCell
+          .getPossibleMovements()
+          .filter(
+            (position) =>
+              position.row === toPosition.row && position.col === toPosition.col
+          ).length
+      ) {
+        fromCell.move(toPosition);
         setBoard(board.getNewBoard());
+
+        setTimeout(() => {
+          const move = getAIPlayerCheckerMovement(board);
+          if (!move) {
+            // board.changeTurn();
+          } else {
+            const fromCell = board.getCell(move.fromPosition);
+            fromCell.move(move.toPosition);
+            setBoard(board.getNewBoard());
+          }
+        }, 500);
       }
     }
     setHighlightedPositions([]);
