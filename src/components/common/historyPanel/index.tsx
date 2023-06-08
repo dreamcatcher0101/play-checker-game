@@ -2,7 +2,7 @@ import { GamePlayer } from 'consts';
 import React, { useContext } from 'react';
 import './style.css';
 import { BoardContext } from 'contexts';
-import { convertCheckerPositionToString } from 'utils/position';
+import { convertCheckerPositionToString } from 'utils';
 
 export const HistoryPanelComponent: React.FC = () => {
   const { board } = useContext(BoardContext);

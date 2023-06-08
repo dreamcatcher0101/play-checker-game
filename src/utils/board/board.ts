@@ -18,13 +18,14 @@ export class GameBoard {
   cells: BoardCell[][];
   boardSize: number;
   player: GamePlayer;
-
+  numberOfMoves: number;
   movementHistory: MovementHistory[];
 
   constructor(
     boardSize: number = BoardSize.SMALL,
     cells: BoardCell[][] = [],
     player: GamePlayer = GamePlayer.RED,
+    numberOfMoves = 0,
     movementHistory: MovementHistory[] = []
   ) {
     this.boardSize = boardSize;
@@ -57,6 +58,7 @@ export class GameBoard {
     );
 
     this.player = player;
+    this.numberOfMoves = numberOfMoves;
     this.movementHistory = movementHistory;
   }
 
@@ -70,6 +72,7 @@ export class GameBoard {
       this.boardSize,
       this.cells,
       this.player,
+      this.numberOfMoves,
       this.movementHistory
     );
     board.saveToLS();
@@ -116,6 +119,7 @@ export class GameBoard {
     } else {
       flag = flag && !!this.getCell(fromPosition).getPossibleMovements().length;
     }
+
     return flag;
   };
 
@@ -162,6 +166,7 @@ export class GameBoard {
       )
     );
     localStorage.setItem('player', this.player.toString());
+    localStorage.setItem('numberOfMoves', this.numberOfMoves.toString());
     localStorage.setItem(
       'movementHistory',
       JSON.stringify(this.movementHistory)
@@ -176,11 +181,18 @@ export class GameBoard {
       localStorage.getItem('cells') ?? '[]'
     );
     const player = Number(localStorage.getItem('player') ?? GamePlayer.RED);
-    const movementHistory = JSON.parse(
+    const numberOfMoves = Number(localStorage.getItem('numberOfMoves') ?? '0');
+    const movementHistory: MovementHistory[] = JSON.parse(
       localStorage.getItem('movementHistory') ?? '[]'
     );
 
-    return new GameBoard(boardSize, cells, player, movementHistory);
+    return new GameBoard(
+      boardSize,
+      cells,
+      player,
+      numberOfMoves,
+      movementHistory
+    );
   };
 
   public updateCells = () => {

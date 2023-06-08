@@ -1,0 +1,50 @@
+.play-time-panel {
+  display: grid;
+  gap: 4px;
+}
+
+.time-box-focused {
+  border: 8px brown solid;
+}
+
+.time-box-not-focused {
+  border: 8px white solid;
+}
+
+.play-time-box {
+  font-size: 16px;
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 12px;
+}
+
+.blue-time-box {
+  background-color: blue;
+}
+
+.red-time-box {
+  background-color: red;
+}
+
+.play-time-title {
+  width: 60px;
+  text-align: right;
+}
+
+.blue-time-title {
+  color: white;
+}
+
+.red-time-title {
+  color: white;
+}
+
+.play-time {
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  font-size: 16px;
+}

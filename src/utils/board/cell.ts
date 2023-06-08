@@ -144,6 +144,13 @@ export class BoardCell {
 
       this.board.getCell(toPosition).state = this.state;
       this.state = BoardCellState.EMPTY;
+
+      if (this.board.player === GamePlayer.BLUE) {
+        console.log(this.board.numberOfMoves);
+        this.board.numberOfMoves++;
+        console.log(this.board.numberOfMoves);
+      }
+
       this.board.changeTurn();
     } else if (
       this.getPossibleCaptureMovements().filter(
