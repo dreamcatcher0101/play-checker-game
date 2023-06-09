@@ -20,13 +20,15 @@ export class GameBoard {
   player: GamePlayer;
   numberOfMoves: number;
   movementHistory: MovementHistory[];
+  isFinished: null | GamePlayer;
 
   constructor(
     boardSize: number = BoardSize.SMALL,
     cells: BoardCell[][] = [],
     player: GamePlayer = GamePlayer.RED,
     numberOfMoves = 0,
-    movementHistory: MovementHistory[] = []
+    movementHistory: MovementHistory[] = [],
+    isFinished: null | GamePlayer = null
   ) {
     this.boardSize = boardSize;
 
@@ -60,6 +62,7 @@ export class GameBoard {
     this.player = player;
     this.numberOfMoves = numberOfMoves;
     this.movementHistory = movementHistory;
+    this.isFinished = isFinished;
   }
 
   /*------- Getter -------*/
@@ -73,7 +76,8 @@ export class GameBoard {
       this.cells,
       this.player,
       this.numberOfMoves,
-      this.movementHistory
+      this.movementHistory,
+      this.isFinished
     );
     board.saveToLS();
     return board;
@@ -185,21 +189,38 @@ export class GameBoard {
     const movementHistory: MovementHistory[] = JSON.parse(
       localStorage.getItem('movementHistory') ?? '[]'
     );
+    const isFinished: null | GamePlayer = localStorage.getItem('isFinished')
+      ? Number(localStorage.getItem('isFinished'))
+      : null;
 
     return new GameBoard(
       boardSize,
       cells,
       player,
       numberOfMoves,
-      movementHistory
+      movementHistory,
+      isFinished
     );
   };
 
   public updateCells = () => {
+    let blueBalls = 0;
+    let redBalls = 0;
     this.cells.forEach((cellRow) =>
       cellRow.forEach((cell) => {
         cell.makeKing();
+        if (cell.isBlue()) {
+          blueBalls++;
+        }
+        if (cell.isRed()) {
+          redBalls++;
+        }
       })
     );
+    if (blueBalls === 0) {
+      this.isFinished = GamePlayer.RED;
+    } else if (redBalls === 0) {
+      this.isFinished = GamePlayer.BLUE;
+    }
   };
 }

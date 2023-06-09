@@ -12,12 +12,18 @@ interface ModalContextType {
 
 interface ModalOptions {
   isClosable?: boolean;
-  title: string;
+  title?: string;
+  closeOnClick?: boolean;
+  onClose?: () => void;
 }
 
 const defaultModalOptions: Required<ModalOptions> = {
   isClosable: false,
   title: '',
+  closeOnClick: false,
+  onClose: () => {
+    // Triggered when the modal is closed
+  },
 };
 
 export const ModalContext = React.createContext<ModalContextType>({
@@ -48,6 +54,18 @@ export const ModalContextProvider: React.FC<ModalContextProviderProps> = ({
 
   const close = () => {
     setIsOpen(false);
+    if (modalOptions.onClose) {
+      modalOptions.onClose();
+    }
+  };
+
+  const handleModalClick = () => {
+    if (modalOptions.closeOnClick) {
+      setIsOpen(false);
+      if (modalOptions.onClose) {
+        modalOptions.onClose();
+      }
+    }
   };
 
   return (
@@ -59,16 +77,18 @@ export const ModalContextProvider: React.FC<ModalContextProviderProps> = ({
     >
       {children}
       {isOpen && (
-        <div className="modal">
+        <div className="modal" onClick={handleModalClick}>
           <div className="modal__container">
-            <div className="modal-header__container">
-              <div className="modal-header-title">{modalOptions.title}</div>
-              {modalOptions.isClosable && (
-                <div className="modal-header-close-button" onClick={close}>
-                  &times;
-                </div>
-              )}
-            </div>
+            {!!modalOptions.title && (
+              <div className="modal-header__container">
+                <div className="modal-header-title">{modalOptions.title}</div>
+                {modalOptions.isClosable && (
+                  <div className="modal-header-close-button" onClick={close}>
+                    &times;
+                  </div>
+                )}
+              </div>
+            )}
             {component}
           </div>
         </div>

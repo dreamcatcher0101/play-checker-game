@@ -124,7 +124,7 @@ export class BoardCell {
   };
 
   /*------- Actions -------*/
-  public move = (toPosition: CheckerPosition) => {
+  public move = (toPosition: CheckerPosition): boolean => {
     if (
       this.getPossibleNormalMovements().filter(
         (position) =>
@@ -146,12 +146,14 @@ export class BoardCell {
       this.state = BoardCellState.EMPTY;
 
       if (this.board.player === GamePlayer.BLUE) {
-        console.log(this.board.numberOfMoves);
         this.board.numberOfMoves++;
-        console.log(this.board.numberOfMoves);
       }
 
       this.board.changeTurn();
+
+      this.board.updateCells();
+
+      return true;
     } else if (
       this.getPossibleCaptureMovements().filter(
         (positions) =>
@@ -186,9 +188,13 @@ export class BoardCell {
         BoardCellState.EMPTY;
       this.state = BoardCellState.EMPTY;
       this.board.changeTurn();
-    }
 
-    this.board.updateCells();
+      this.board.updateCells();
+
+      return true;
+    } else {
+      return false;
+    }
   };
 
   public makeKing = () => {
