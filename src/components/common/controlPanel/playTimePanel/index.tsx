@@ -38,7 +38,7 @@ export const PlayTimePanelComponent: React.FC = () => {
 
   return (
     <div className="play-time-panel">
-      <div className="play-time-name">Play Time</div>
+      <div className="play-time-name">Game Status</div>
       <div
         className={`blue-time-box play-time-box ${
           board.player === GamePlayer.BLUE
@@ -46,10 +46,14 @@ export const PlayTimePanelComponent: React.FC = () => {
             : 'time-box-not-focused'
         }`}
       >
-        <span className="blue-time-title play-time-title">BLUE:</span>
-        <span className="play-time">{`${convertPlayTimeToString(
-          playTime[GamePlayer.BLUE]
-        )}`}</span>
+        <div>
+          <span className="blue-time-title play-time-title">BLUE:</span>
+          <span className="play-time">{`${convertPlayTimeToString(
+            playTime[GamePlayer.BLUE]
+          )}`}</span>
+        </div>
+        <div>Soldier: 7</div>
+        <div>King: 1</div>
       </div>
       <div
         className={`red-time-box play-time-box ${
