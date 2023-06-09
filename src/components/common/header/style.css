@@ -2,7 +2,8 @@
   position: relative;
   z-index: 10;
   height: 70px;
-  font-size: 32px;
+  font-size: 52px;
+  padding: 20px;
   font-weight: bold;
   color: white;
   display: flex;

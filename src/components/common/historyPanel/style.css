@@ -6,7 +6,7 @@
 }
 
 .history-panel {
-  border: 1px solid black;
+  border: 3px solid white;
   height: 500px;
   margin: 0px;
   overflow: auto;
@@ -15,4 +15,9 @@
 .history-record {
   font-size: 16px;
   text-align: left;
+  margin-top: 10px;
+}
+
+.history-panel::-webkit-scrollbar {
+  display: none;
 }
