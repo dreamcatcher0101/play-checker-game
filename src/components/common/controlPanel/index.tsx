@@ -5,7 +5,45 @@ import { PlayTimePanelComponent } from './playTimePanel';
 import './style.css';
 import { BoardContext, ModalContext } from 'contexts';
 
+interface ButtonProps {
+  as?: React.ElementType;
+  children: React.ReactNode;
+  filled?: boolean;
+  secondary?: boolean;
+  role?: string;
+  onClick?: () => void;
+}
+
 export const ControlPanelComponent: React.FC = () => {
+  const Button = ({
+    as: Component = 'button',
+    children,
+    filled,
+    secondary,
+    role,
+    onClick,
+  }: ButtonProps) => {
+    return (
+      <Component
+        className={`dir-control ${secondary ? 'dir-control--secondary' : ''} ${
+          filled ? 'dir-control--filled' : ''
+        }`}
+        role={role}
+        onClick={onClick}
+      >
+        {children}
+        <span />
+        <span />
+        <span />
+        <span />
+        <b aria-hidden="true">{children}</b>
+        <b aria-hidden="true">{children}</b>
+        <b aria-hidden="true">{children}</b>
+        <b aria-hidden="true">{children}</b>
+      </Component>
+    );
+  };
+
   const { board, startNewGame, setBoardSize, revertMove } =
     useContext(BoardContext);
   const modal = useContext(ModalContext);
@@ -51,15 +89,15 @@ export const ControlPanelComponent: React.FC = () => {
 
   return (
     <div className="control-panel__container">
-      <div className="control-button__container" onClick={handleNewGame}>
+      <Button role="button" secondary onClick={() => handleNewGame()}>
         New Game
-      </div>
-      <div className="control-button__container" onClick={handleOptions}>
+      </Button>
+      <Button role="button" secondary onClick={() => handleOptions()}>
         Options
-      </div>
-      <div className="control-button__container" onClick={handleRevert}>
+      </Button>
+      <Button role="button" secondary onClick={() => handleRevert()}>
         Revert
-      </div>
+      </Button>
       <PlayTimePanelComponent />
       <div className="moves-number__container">
         Number of moves: {board.numberOfMoves}
