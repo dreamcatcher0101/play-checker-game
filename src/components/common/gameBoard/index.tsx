@@ -1,11 +1,26 @@
 import { GamePlayer } from 'consts';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { VictoryModalComponent } from '../victoryModal';
 import './style.css';
 import { BoardCellComponent } from 'components/common';
-import { BoardContext } from 'contexts';
+import { BoardContext, ModalContext } from 'contexts';
 
 export const GameBoardComponent: React.FC = () => {
-  const { board, boardSize } = useContext(BoardContext);
+  const { board, boardSize, startNewGame } = useContext(BoardContext);
+  const modal = useContext(ModalContext);
+
+  useEffect(() => {
+    if (board.isFinished !== null) {
+      modal.open(<VictoryModalComponent player={board.isFinished} />, {
+        closeOnClick: true,
+        onClose: () => {
+          startNewGame();
+        },
+      });
+    } else {
+      modal.close();
+    }
+  }, [board.isFinished]);
 
   return (
     <div className="game-board">
@@ -41,6 +56,10 @@ export const GameBoardComponent: React.FC = () => {
           ))}
         </tbody>
       </table>
+
+      {board.isFinished !== null && (
+        <VictoryModalComponent player={board.isFinished} />
+      )}
     </div>
   );
 };

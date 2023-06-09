@@ -21,6 +21,7 @@ export const PlayTimePanelComponent: React.FC = () => {
 
   return (
     <div className="play-time-panel">
+      <div className="play-time-name">Play Time</div>
       <div
         className={`blue-time-box play-time-box ${
           board.player === GamePlayer.BLUE
