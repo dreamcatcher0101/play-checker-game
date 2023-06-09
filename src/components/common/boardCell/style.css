@@ -1,7 +1,6 @@
 .board-cell__container {
   width: 48px;
   height: 48px;
-  /* aspect-ratio: 1 / 1; */
   padding: 12px;
   display: inline-flex;
   align-items: center;
