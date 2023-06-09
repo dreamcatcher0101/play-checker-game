@@ -1,14 +1,24 @@
 import { GamePlayer } from 'consts';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { PlayTime } from 'types';
 import './style.css';
 import { BoardContext } from 'contexts';
 import { convertPlayTimeToString } from 'utils';
 
 export const PlayTimePanelComponent: React.FC = () => {
-  const { playTime, board, increasePlayerTime } = useContext(BoardContext);
+  const [playTime, setPlayTime] = useState<PlayTime>({
+    [GamePlayer.BLUE]: 0,
+    [GamePlayer.RED]: 0,
+  });
+  const { board } = useContext(BoardContext);
 
   const handleTimeInterval = () => {
-    increasePlayerTime();
+    setPlayTime((playTime) => {
+      return {
+        ...playTime,
+        [board.player]: playTime[board.player] + 1,
+      };
+    });
   };
 
   useEffect(() => {
@@ -18,6 +28,13 @@ export const PlayTimePanelComponent: React.FC = () => {
       clearInterval(interval);
     };
   }, []);
+
+  useEffect(() => {
+    setPlayTime({
+      [GamePlayer.BLUE]: 0,
+      [GamePlayer.RED]: 0,
+    });
+  }, [board.isFinished]);
 
   return (
     <div className="play-time-panel">
