@@ -1,49 +1,12 @@
 import React, { useContext } from 'react';
+import { Button } from '../button';
 import { ConfirmModalComponent } from '../confirmModal';
 import { GameOptionsModalComponent } from '../optionsModal';
 import { PlayTimePanelComponent } from './playTimePanel';
 import './style.css';
 import { BoardContext, ModalContext } from 'contexts';
 
-interface ButtonProps {
-  as?: React.ElementType;
-  children: React.ReactNode;
-  filled?: boolean;
-  secondary?: boolean;
-  role?: string;
-  onClick?: () => void;
-}
-
 export const ControlPanelComponent: React.FC = () => {
-  const Button = ({
-    as: Component = 'button',
-    children,
-    filled,
-    secondary,
-    role,
-    onClick,
-  }: ButtonProps) => {
-    return (
-      <Component
-        className={`dir-control ${secondary ? 'dir-control--secondary' : ''} ${
-          filled ? 'dir-control--filled' : ''
-        }`}
-        role={role}
-        onClick={onClick}
-      >
-        {children}
-        <span />
-        <span />
-        <span />
-        <span />
-        <b aria-hidden="true">{children}</b>
-        <b aria-hidden="true">{children}</b>
-        <b aria-hidden="true">{children}</b>
-        <b aria-hidden="true">{children}</b>
-      </Component>
-    );
-  };
-
   const { board, startNewGame, setBoardSize, revertMove } =
     useContext(BoardContext);
   const modal = useContext(ModalContext);
