@@ -2,10 +2,20 @@ import { GamePlayer } from 'consts';
 import { CheckerPosition } from 'types';
 import { GameBoard } from './board';
 
+/**
+ * Get next player
+ * @param player Current player
+ * @returns Next player
+ */
 export const getNextPlayer = (player: GamePlayer) => {
   return 3 - player;
 };
 
+/**
+ * Get the AI player's next checker movement
+ * @param board Game board class instance
+ * @returns Movement from position and to position
+ */
 export const getAIPlayerCheckerMovement = (
   board: GameBoard
 ): {

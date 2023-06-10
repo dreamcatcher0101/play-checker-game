@@ -1,21 +1,7 @@
 .control-panel__container {
   display: grid;
-  gap: 20px;
+  gap: 16px;
   align-self: center;
-}
-
-.control-button__container {
-  width: 200px;
-  border-radius: 12px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  text-align: center;
-  background-color: lightblue;
-  cursor: pointer;
-}
-
-.control-button__container:hover {
-  background-color: lightcoral;
 }
 
 .moves-number__container {

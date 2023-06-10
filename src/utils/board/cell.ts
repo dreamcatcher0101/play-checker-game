@@ -10,11 +10,15 @@ import {
   getPossibleCapturePositions,
 } from './movements';
 
+/**
+ * BoardCell Class
+ * Every cell of the game board
+ */
 export class BoardCell {
-  row: number;
-  col: number;
-  board: GameBoard;
-  state: BoardCellState;
+  row: number; // Row number in the board
+  col: number; // Col number in the board
+  board: GameBoard; // Game board instance
+  state: BoardCellState; // Cell state
 
   constructor(
     row: number,
@@ -40,9 +44,12 @@ export class BoardCell {
   };
 
   public getPossibleNormalMovements = (): CheckerPosition[] => {
+    // If the checker is not current player's checker, can not move
     if (!this.isTurn()) {
       return [];
     }
+
+    // Get possible normal position from this cell position
     const possiblePositions = getPossibleNormalPositions(
       this.state,
       {
@@ -52,6 +59,7 @@ export class BoardCell {
       this.board.boardSize
     );
 
+    // Return the positions that the cell is empty
     return possiblePositions.filter((position) =>
       this.board.getCell(position).isEmpty()
     );
@@ -61,9 +69,12 @@ export class BoardCell {
     enemyCheckerPosition: CheckerPosition;
     movedPosition: CheckerPosition;
   }[] => {
+    // If the checker is not current player's checker, can not move
     if (!this.isTurn()) {
       return [];
     }
+
+    // Get possible capture position from this cell position
     const possiblePositions = getPossibleCapturePositions(
       this.state,
       {
@@ -73,6 +84,8 @@ export class BoardCell {
       this.board.boardSize
     );
 
+    // Return the positions that can capture the enemy's checker
+    // and can move to the empty cell
     return possiblePositions.filter(
       (positions) =>
         this.board.getCell(positions.movedPosition).isEmpty() &&
@@ -125,12 +138,18 @@ export class BoardCell {
 
   /*------- Actions -------*/
   public move = (toPosition: CheckerPosition): boolean => {
+    // Check if the movement is normal move or capture move
+    // If it's valid move, need to update corresponding cells' state
+    // Increase the number of moves
+    // Change the current player's turn
+    // Check the cells and make the checker king if it's reached to the end
     if (
       this.getPossibleNormalMovements().filter(
         (position) =>
           position.row === toPosition.row && position.col === toPosition.col
       ).length
     ) {
+      // If this is possible move
       this.board.addHistory({
         player: this.board.player,
         state: this.state,
@@ -161,6 +180,7 @@ export class BoardCell {
           positions.movedPosition.col === toPosition.col
       ).length
     ) {
+      // If this is capture move
       const [position] = this.getPossibleCaptureMovements().filter(
         (positions) =>
           positions.movedPosition.row === toPosition.row &&
@@ -187,6 +207,7 @@ export class BoardCell {
       this.board.getCell(position.enemyCheckerPosition).state =
         BoardCellState.EMPTY;
       this.state = BoardCellState.EMPTY;
+
       this.board.changeTurn();
 
       this.board.updateCells();

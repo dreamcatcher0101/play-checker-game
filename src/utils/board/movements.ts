@@ -1,6 +1,8 @@
 import { BoardCellState } from 'consts';
 import { CheckerPosition } from 'types';
 
+// List of checker offsets for each movement
+// Contains the soldier & king checker movement
 const possibleMovements: Record<string, CheckerPosition[]> = {
   [BoardCellState.BLUE_CHECKER]: [
     {
@@ -60,6 +62,13 @@ const possibleMovements: Record<string, CheckerPosition[]> = {
   ],
 };
 
+/**
+ * List the possible normal movement positions
+ * @param state Board cell state
+ * @param position Position in the board
+ * @param boardSize Size of board
+ * @returns Array of the possible move positions
+ */
 export const getPossibleNormalPositions = (
   state: BoardCellState,
   position: CheckerPosition,
@@ -75,6 +84,13 @@ export const getPossibleNormalPositions = (
   return positions.filter((pos) => !isOutOfBoard(pos, boardSize));
 };
 
+/**
+ * List the possible capture movement positions
+ * @param state Board cell state
+ * @param position Position in the board
+ * @param boardSize Size of board
+ * @returns Array of enemy checker position and the possible move positions
+ */
 export const getPossibleCapturePositions = (
   state: BoardCellState,
   position: CheckerPosition,
@@ -106,6 +122,12 @@ export const getPossibleCapturePositions = (
   );
 };
 
+/**
+ * Check the position is out of the board or not
+ * @param position Position in the board
+ * @param boardSize Size of the board
+ * @returns True if it's out of board, false if not
+ */
 export const isOutOfBoard = (
   position: CheckerPosition,
   boardSize: number

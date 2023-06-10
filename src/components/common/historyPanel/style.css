@@ -1,7 +1,23 @@
 .history-panel__container {
   width: 200px;
-  border: 1px solid black;
+  font-size: 36px;
+  text-align: center;
+  justify-content: center;
 }
 
-.record__container {
+.history-panel {
+  border: 3px solid white;
+  height: 500px;
+  margin: 0px;
+  overflow: auto;
+}
+
+.history-record {
+  font-size: 16px;
+  text-align: left;
+  margin-top: 10px;
+}
+
+.history-panel::-webkit-scrollbar {
+  display: none;
 }

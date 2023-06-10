@@ -1,7 +1,6 @@
-import { BoardSize, GamePlayer } from 'consts';
+import { BoardSize } from 'consts';
 import React, { useState, useEffect } from 'react';
 import { CheckerPosition } from 'types';
-import { PlayTime } from 'types';
 import { GameBoard, getAIPlayerCheckerMovement } from 'utils';
 
 interface BoardContextProviderProps {
@@ -12,7 +11,6 @@ interface BoardContextType {
   boardSize: number;
   board: GameBoard;
   highlightedPositions: CheckerPosition[];
-  playTime: PlayTime;
   highlightPositions: (position: CheckerPosition) => void;
   setBoardSize: (size: number) => void;
   moveChecker: (
@@ -21,14 +19,12 @@ interface BoardContextType {
   ) => void;
   startNewGame: () => void;
   revertMove: () => void;
-  increasePlayerTime: () => void;
 }
 
 export const BoardContext = React.createContext<BoardContextType>({
   boardSize: BoardSize.SMALL,
   board: new GameBoard(),
   highlightedPositions: [],
-  playTime: { [GamePlayer.BLUE]: 0, [GamePlayer.RED]: 0 },
   highlightPositions: () => {
     // Highlight possible movements
   },
@@ -44,54 +40,46 @@ export const BoardContext = React.createContext<BoardContextType>({
   revertMove: () => {
     // Revert the last move
   },
-  increasePlayerTime: () => {
-    // Increase player playing time
-  },
 });
 
 export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
   children,
 }) => {
+  // Size of the board
   const [boardSize, setBoardSize] = useState<number>(BoardSize.SMALL);
+  // Instance of GameBoard
   const [board, setBoard] = useState<GameBoard>(new GameBoard());
+  // Possible movement positions when the mouse over the cell
+  // Used to highlight the possible movement positions
   const [highlightedPositions, setHighlightedPositions] = useState<
     CheckerPosition[]
   >([]);
-  const [playTime, setPlayTime] = useState<PlayTime>({
-    [GamePlayer.BLUE]: 0,
-    [GamePlayer.RED]: 0,
-  });
-  // const [isAIPlayer, setIsAIPlayer] = useState<boolean>(true);
 
   const moveChecker = (
     fromPosition: CheckerPosition,
     toPosition: CheckerPosition
   ) => {
     if (board.isAvailableToMove(fromPosition, toPosition)) {
+      // Operates the current move
       const fromCell = board.getCell(fromPosition);
-      if (
-        fromCell
-          .getPossibleMovements()
-          .filter(
-            (position) =>
-              position.row === toPosition.row && position.col === toPosition.col
-          ).length
-      ) {
-        fromCell.move(toPosition);
-        setBoard(board.getNewBoard());
+      fromCell.move(toPosition);
+      setBoard(board.getNewBoard());
 
-        setTimeout(() => {
-          const move = getAIPlayerCheckerMovement(board);
-          if (!move) {
-            // board.changeTurn();
-          } else {
-            const fromCell = board.getCell(move.fromPosition);
-            fromCell.move(move.toPosition);
-            setBoard(board.getNewBoard());
-          }
-        }, 500);
-      }
+      // Get the AI player's next move
+      setTimeout(() => {
+        const move = getAIPlayerCheckerMovement(board);
+        // If no possible moves for the AI player, change turn
+        if (!move) {
+          board.changeTurn();
+        } else {
+          // Operates the AI player's move
+          const fromCell = board.getCell(move.fromPosition);
+          fromCell.move(move.toPosition);
+          setBoard(board.getNewBoard());
+        }
+      }, 500);
     }
+
     setHighlightedPositions([]);
   };
 
@@ -113,11 +101,6 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
     const board = new GameBoard(boardSize);
     board.saveToLS();
     setBoard(board);
-
-    setPlayTime({
-      [GamePlayer.BLUE]: 0,
-      [GamePlayer.RED]: 0,
-    });
   };
 
   const changeBoardSize = (boardSize: number) => {
@@ -125,18 +108,6 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
     const board = new GameBoard(boardSize);
     board.saveToLS();
     setBoard(board);
-
-    setPlayTime({
-      [GamePlayer.BLUE]: 0,
-      [GamePlayer.RED]: 0,
-    });
-  };
-
-  const increasePlayerTime = () => {
-    setPlayTime((playTime) => ({
-      ...playTime,
-      [board.player]: playTime[board.player] + 1,
-    }));
   };
 
   useEffect(() => {
@@ -149,13 +120,11 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
         board,
         boardSize,
         highlightedPositions,
-        playTime,
         highlightPositions,
         setBoardSize: changeBoardSize,
         moveChecker,
         startNewGame,
         revertMove,
-        increasePlayerTime,
       }}
     >
       {children}

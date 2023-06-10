@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Button } from '../button';
 import { ConfirmModalComponent } from '../confirmModal';
 import { GameOptionsModalComponent } from '../optionsModal';
 import { PlayTimePanelComponent } from './playTimePanel';
@@ -51,15 +52,15 @@ export const ControlPanelComponent: React.FC = () => {
 
   return (
     <div className="control-panel__container">
-      <div className="control-button__container" onClick={handleNewGame}>
+      <Button role="button" secondary onClick={() => handleNewGame()}>
         New Game
-      </div>
-      <div className="control-button__container" onClick={handleOptions}>
+      </Button>
+      <Button role="button" secondary onClick={() => handleOptions()}>
         Options
-      </div>
-      <div className="control-button__container" onClick={handleRevert}>
+      </Button>
+      <Button role="button" secondary onClick={() => handleRevert()}>
         Revert
-      </div>
+      </Button>
       <PlayTimePanelComponent />
       <div className="moves-number__container">
         Number of moves: {board.numberOfMoves}

@@ -71,6 +71,8 @@ export class GameBoard {
   };
 
   public getNewBoard = (): GameBoard => {
+    // Get and return new instance of GameBoard with new states
+    // Save the game state to local storage
     const board = new GameBoard(
       this.boardSize,
       this.cells,
@@ -83,17 +85,22 @@ export class GameBoard {
     return board;
   };
 
-  public getPossibleMovePositions = (
-    position: CheckerPosition
-  ): CheckerPosition[] => {
-    return this.cells[position.row][position.col].getPossibleMovements();
-  };
-
   /*------- Status -------*/
   public isAvailableToMove = (
     fromPosition: CheckerPosition,
     toPosition: CheckerPosition | null = null
   ): boolean => {
+    // Check that the move is valid or not
+    // If toPosition is null, check fromPosition cell is available to move
+    // If toPosition is not null, check the move
+    // from fromPosition to toPosition is valid
+
+    // If current cell have the possible capture moves, it's valid
+    if (this.getCell(fromPosition).getPossibleCaptureMovements().length) {
+      return true;
+    }
+
+    // Check the capture movement of other checkers
     const captureMovements = this.cells
       .map((cellRow) =>
         cellRow
@@ -106,22 +113,26 @@ export class GameBoard {
       )
       .reduce((result, value) => result + value, 0);
 
-    if (this.getCell(fromPosition).getPossibleCaptureMovements().length) {
-      return true;
-    }
-
+    // If toPosition is not null
     let flag = !captureMovements;
     if (toPosition) {
+      // If there's no other cells' capture movements
+      // and toPosition is valid normal move
+      // return true
       flag =
         flag &&
         !!this.getCell(fromPosition)
-          .getPossibleMovements()
+          .getPossibleNormalMovements()
           .filter(
             (position) =>
               position.row === toPosition.row && position.col === toPosition.col
           ).length;
     } else {
-      flag = flag && !!this.getCell(fromPosition).getPossibleMovements().length;
+      // If there's no other cells' capture movements
+      // and there's possible movement for this cell
+      flag =
+        flag &&
+        !!this.getCell(fromPosition).getPossibleNormalMovements().length;
     }
 
     return flag;
@@ -137,13 +148,16 @@ export class GameBoard {
   };
 
   public revertLastMove = () => {
+    // Get last two movements
     const lastMovements = this.movementHistory.slice(-2);
 
+    // Remove the last two movements from the history
     this.movementHistory = this.movementHistory.slice(
       0,
       this.movementHistory.length - lastMovements.length
     );
 
+    // Revert the movements
     lastMovements.reverse().forEach((move) => {
       this.getCell(move.fromPosition).state = move.state;
       this.getCell(move.toPosition).state = BoardCellState.EMPTY;
@@ -204,6 +218,8 @@ export class GameBoard {
   };
 
   public updateCells = () => {
+    // Check the cells' state, and make king if it reaches the end
+    // If no balls, the opponent win!
     let blueBalls = 0;
     let redBalls = 0;
     this.cells.forEach((cellRow) =>

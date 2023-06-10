@@ -1,7 +1,13 @@
 .header__container {
-  text-align: center;
-  font-size: 24px;
-  padding: 12px 0px;
-  background-color: aquamarine;
-  color: black;
+  position: relative;
+  z-index: 10;
+  height: 70px;
+  font-size: 52px;
+  padding: 20px;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
 }
