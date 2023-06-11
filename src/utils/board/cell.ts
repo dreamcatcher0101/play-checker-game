@@ -164,7 +164,7 @@ export class BoardCell {
       this.board.getCell(toPosition).state = this.state;
       this.state = BoardCellState.EMPTY;
 
-      if (this.board.player === GamePlayer.BLUE) {
+      if (this.board.player === GamePlayer.RED) {
         this.board.numberOfMoves++;
       }
 
@@ -207,6 +207,10 @@ export class BoardCell {
       this.board.getCell(position.enemyCheckerPosition).state =
         BoardCellState.EMPTY;
       this.state = BoardCellState.EMPTY;
+
+      if (this.board.player === GamePlayer.RED) {
+        this.board.numberOfMoves++;
+      }
 
       this.board.changeTurn();
 
