@@ -52,13 +52,13 @@ export const ControlPanelComponent: React.FC = () => {
 
   return (
     <div className="control-panel__container">
-      <Button role="button" secondary onClick={() => handleNewGame()}>
+      <Button secondary onClick={() => handleNewGame()}>
         New Game
       </Button>
-      <Button role="button" secondary onClick={() => handleOptions()}>
+      <Button secondary onClick={() => handleOptions()}>
         Options
       </Button>
-      <Button role="button" secondary onClick={() => handleRevert()}>
+      <Button secondary onClick={() => handleRevert()}>
         Revert
       </Button>
       <PlayTimePanelComponent />
