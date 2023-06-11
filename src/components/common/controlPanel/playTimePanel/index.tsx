@@ -52,8 +52,6 @@ export const PlayTimePanelComponent: React.FC = () => {
             playTime[GamePlayer.BLUE]
           )}`}</span>
         </div>
-        <div>Soldier: 7</div>
-        <div>King: 1</div>
       </div>
       <div
         className={`red-time-box play-time-box ${
