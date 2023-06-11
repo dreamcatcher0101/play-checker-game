@@ -85,6 +85,7 @@ export const BoardContextProvider: React.FC<BoardContextProviderProps> = ({
 
   const revertMove = () => {
     board.revertLastMove();
+    board.numberOfMoves = Math.max(board.numberOfMoves - 1, 0);
     setBoard(board.getNewBoard());
   };
 
