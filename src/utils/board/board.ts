@@ -97,7 +97,17 @@ export class GameBoard {
 
     // If current cell have the possible capture moves, it's valid
     if (this.getCell(fromPosition).getPossibleCaptureMovements().length) {
-      return true;
+      if (!toPosition) {
+        return true;
+      } else {
+        return !!this.getCell(fromPosition)
+          .getPossibleCaptureMovements()
+          .filter(
+            (position) =>
+              position.movedPosition.row === toPosition.row &&
+              position.movedPosition.col === toPosition.col
+          ).length;
+      }
     }
 
     // Check the capture movement of other checkers
