@@ -164,6 +164,27 @@ describe('Check game board', () => {
           )
         ).toEqual(true);
       });
+
+      test('check move availability if there is capture movement', () => {
+        const gameBoard = new GameBoard(BoardSize.SMALL);
+        gameBoard.cells[5][2].state = BoardCellState.EMPTY;
+        gameBoard.cells[4][3].state = BoardCellState.RED_CHECKER;
+        gameBoard.cells[3][2].state = BoardCellState.BLUE_CHECKER;
+        gameBoard.cells[2][1].state = BoardCellState.EMPTY;
+
+        expect(
+          gameBoard.isAvailableToMove(
+            {
+              row: 5,
+              col: 6,
+            },
+            {
+              row: 4,
+              col: 7,
+            }
+          )
+        ).toEqual(false);
+      });
     });
   });
 
