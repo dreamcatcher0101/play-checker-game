@@ -11,7 +11,7 @@ export const VictoryModalComponent: React.FC<VictoryModalProps> = ({
 }) => {
   return (
     <div className="victory-banner__container">
-      {player === GamePlayer.RED ? 'Red' : 'Blue'}&nbsp;Player Wins!
+      {player === GamePlayer.RED ? 'Red' : 'Blue'}&nbsp;Player Win!
     </div>
   );
 };

@@ -47,7 +47,7 @@ export const PlayTimePanelComponent: React.FC = () => {
         }`}
       >
         <div>
-          <span className="blue-time-title play-time-title">BLUE:</span>
+          <span className="blue-time-title play-time-title">BLUE </span>
           <span className="play-time">{`${convertPlayTimeToString(
             playTime[GamePlayer.BLUE]
           )}`}</span>
@@ -63,7 +63,7 @@ export const PlayTimePanelComponent: React.FC = () => {
         }`}
       >
         <div>
-          <span className="red-time-title play-time-title">RED:</span>{' '}
+          <span className="red-time-title play-time-title">RED </span>{' '}
           <span className="play-time">{`${convertPlayTimeToString(
             playTime[GamePlayer.RED]
           )}`}</span>
